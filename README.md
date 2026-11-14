@@ -17,12 +17,13 @@ NewsPilot AI is a lightweight end-to-end news automation system for collecting f
 1. Create a virtual environment and install dependencies:
    `py -3 -m venv .venv`
    `.venv\Scripts\Activate.ps1`
-   `py -3 -m pip install -r requirements.txt`
+   `py -3 -m pip install -r backend\requirements.txt`
 
 2. Copy environment values:
    `Copy-Item .env.example .env`
 
 3. Start the API:
+   `Set-Location backend`
    `py -3 -m newspilot.main`
 
 4. Open the dashboard: `http://localhost:8000/`
@@ -30,6 +31,13 @@ NewsPilot AI is a lightweight end-to-end news automation system for collecting f
    - Health check: `http://localhost:8000/health`
 
 The dashboard lets you add news sources, collect news, review discovered stories, and generate article drafts. Only sources added in the dashboard are collected; no example feeds are added automatically. Hindi and English feeds are supported. Add an RSS/Atom URL, or a website URL that advertises its feed. Headlines and summaries are displayed in their original language. Drafts are not published automatically.
+
+## Project structure
+
+- `frontend/` contains the dashboard HTML, CSS, and JavaScript.
+- `backend/` contains the FastAPI application, tests, and Python dependencies.
+- `wordpress-plugin/` contains the WordPress connector plugin.
+- `.env` and `data/` stay at the project root for local configuration and database storage.
 
 ## Default workflow
 

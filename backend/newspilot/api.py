@@ -4,7 +4,6 @@ import json
 import sqlite3
 import logging
 from datetime import datetime, timedelta, timezone
-from pathlib import Path
 
 from apscheduler.schedulers.background import BackgroundScheduler
 from bs4 import BeautifulSoup
@@ -12,7 +11,7 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 from fastapi.staticfiles import StaticFiles
 
-from .config import APP_NAME, SCHEDULER_INTERVAL_MINUTES
+from .config import APP_NAME, FRONTEND_DIR, SCHEDULER_INTERVAL_MINUTES
 from .db import get_db_connection, initialize_db
 from .services.article_writer import generate_article_from_story
 from .services.news_collector import collect_news_for_all_sources, parse_datetime
@@ -583,7 +582,7 @@ def create_app() -> FastAPI:
 
     app.mount(
         "/",
-        StaticFiles(directory=Path(__file__).parent / "static", html=True),
+        StaticFiles(directory=FRONTEND_DIR, html=True),
         name="frontend",
     )
     return app
