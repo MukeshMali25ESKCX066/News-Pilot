@@ -8,36 +8,53 @@ NewsPilot AI is a lightweight end-to-end news automation system for collecting f
 - Duplicate detection and title normalization
 - Story clustering by similarity
 - Research summary generation
-- AI-assisted article drafting with OpenAI fallback
+- AI-assisted article drafting with Gemini
 - SQLite-backed tracking of sources, stories, and generated articles
 - FastAPI APIs for source management and article creation
+- Next.js dashboard frontend
 
 ## Quick start
 
-1. Create a virtual environment and install dependencies:
+Prerequisites: Python 3 and Node.js 20.9 or later.
+
+1. Install the Python backend dependencies:
    `py -3 -m venv .venv`
    `.venv\Scripts\Activate.ps1`
    `py -3 -m pip install -r backend\requirements.txt`
 
-2. Copy environment values:
-   `Copy-Item .env.example .env`
+2. Set up backend environment values:
+   `if (-not (Test-Path .env)) { Copy-Item .env.example .env }`
+   Add `GEMINI_API_KEY` to `.env` to enable article generation.
 
-3. Start the API:
+3. Start the Python API in one terminal:
    `Set-Location backend`
    `py -3 -m newspilot.main`
 
-4. Open the dashboard: `http://localhost:8000/`
+4. Start the Next.js frontend in a second terminal:
+   `Set-Location frontend`
+   `npm ci`
+   `npm run dev`
+
+5. Open the dashboard: `http://localhost:3000/`
    - API docs: `http://localhost:8000/docs`
    - Health check: `http://localhost:8000/health`
 
-The dashboard lets you add news sources, collect news, review discovered stories, and generate article drafts. Only sources added in the dashboard are collected; no example feeds are added automatically. Hindi and English feeds are supported. Add an RSS/Atom URL, or a website URL that advertises its feed. Headlines and summaries are displayed in their original language. Drafts are not published automatically.
+The Next.js dashboard talks to the Python API. In local development, Next.js proxies `/api/*` to `http://127.0.0.1:8000`; in production, Vercel proxies those requests to the Render backend configured in `vercel.json`. Only sources added in the dashboard are collected; no example feeds are added automatically. Hindi and English feeds are supported. Add an RSS/Atom URL, or a website URL that advertises its feed. Headlines and summaries are displayed in their original language. Drafts are not published automatically.
+
+For deployment, keep the Vercel project root directory at the repository root. Its configuration installs and builds `frontend/` as a static Next.js export and forwards `/api/*` to the Render backend. The backend's canonical Python dependencies are in `backend/requirements.txt`; the root `requirements.txt` includes that file for hosts configured to install from the repository root.
 
 ## Project structure
 
-- `frontend/` contains the dashboard HTML, CSS, and JavaScript.
-- `backend/` contains the FastAPI application, tests, and Python dependencies.
+- `frontend/` contains the Next.js app, React dashboard, and TypeScript types.
+- `backend/` contains the Python FastAPI application, tests, and dependencies.
+- Root `requirements.txt` includes `backend/requirements.txt` for hosts that install dependencies from the repository root.
 - `wordpress-plugin/` contains the WordPress connector plugin.
+- `vercel.json` builds the frontend and routes its API requests to the Python backend.
 - `.env` and `data/` stay at the project root for local configuration and database storage.
+
+Run backend tests from the backend directory:
+
+`py -3 -m pytest tests\test_newspilot.py -q`
 
 ## Default workflow
 

@@ -203,12 +203,12 @@ def test_article_generation_reports_gemini_error_after_retries(monkeypatch):
     assert post.call_count == 3
 
 
-def test_dashboard_is_served_at_root():
+def test_health_endpoint():
     with TestClient(create_app()) as client:
-        response = client.get("/")
+        response = client.get("/health")
 
     assert response.status_code == 200
-    assert "NewsPilot AI" in response.text
+    assert response.json()["status"] == "ok"
 
 
 def test_startup_does_not_add_example_sources(tmp_path, monkeypatch):

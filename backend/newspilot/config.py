@@ -6,7 +6,6 @@ from dotenv import load_dotenv
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parents[2]
-FRONTEND_DIR = BASE_DIR / "frontend"
 DB_PATH = BASE_DIR / "data" / "newspilot.db"
 DB_PATH.parent.mkdir(parents=True, exist_ok=True)
 
