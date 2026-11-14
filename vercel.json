@@ -1,8 +1,8 @@
 {
   "rewrites": [
     {
-      "source": "/(.*)",
-      "destination": "https://news-pilot-4g1u.onrender.com/$1"
+      "source": "/:path*",
+      "destination": "https://news-pilot-4g1u.onrender.com/:path*"
     }
   ]
 }
